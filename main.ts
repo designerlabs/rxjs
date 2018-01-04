@@ -58,6 +58,14 @@ let source = Observable.create(
 // }
 
 
+/* Using Promise and Fetch */
+function loadwithFetch(url: string){
+    return Observable.defer(() => {
+        return Observable.fromPromise(fetch(url).then(r => r.json()));
+    });
+    
+}
+
 /* Observable way */
 
 function loadObs(url: string) {
@@ -118,10 +126,11 @@ function load(url: string) {
     xhr.send();
 }
 
+loadwithFetch('movie.json').subscribe(renderMovies);
 
 /*FlatMap 
 */
-click.flatMap(e => loadObs("movies.json"))
+click.flatMap(e => loadwithFetch("movie.json"))
     .subscribe(
     renderMovies,
     e => console.log(`error: ${e}`),
